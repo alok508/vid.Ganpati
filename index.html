@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ganpati Bappa • शुभमंगल</title>
+  <meta name="description" content="A creative, interactive single‑page website celebrating Ganpati Bappa. Includes animations, aarti lyrics, wish wall, gallery, and fun interactions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#060505;
+      --bg-soft:#15100f;
+      --text:#f7efe6;
+      --accent:#ff6a3d; /* modak orange */
+      --accent-2:#e63946; /* kumkum red */
+      --accent-3:#ffd166; /* deepa glow */
+      --card:#1c1412;
+      --muted:#c8b9ad;
+      --success:#2ec4b6;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;scroll-behavior:smooth}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+    header{position:sticky;top:0;z-index:40;background:linear-gradient(180deg, rgba(14,10,9,.95), rgba(14,10,9,.6) 80%, rgba(14,10,9,0));backdrop-filter:blur(6px);}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;gap:10px;align-items:center}
+    .brand svg{width:32px;height:32px}
+    .brand .t{font-family:"Playfair Display";font-weight:800;letter-spacing:.5px}
+    .links a{padding:10px 14px;border-radius:999px;transition:.2s}
+    .links a:hover{background:#ffffff10}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:700;border:none;cursor:pointer;box-shadow:0 10px 24px #ff6a3d33, inset 0 0 0 1px #ffffff22;transition:transform .08s ease}
+    .btn:active{transform:translateY(1px)}
+
+    /* Hero */
+    .hero{position:relative;overflow:hidden}
+    .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center;padding:56px 0}
+    .hero h1{font-family:"Playfair Display";font-size:56px;line-height:1.05;margin:0}
+    .hero p{color:var(--muted);margin:14px 0 24px}
+    .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff1a;margin-bottom:10px;font-size:14px}
+
+    /* Decorative glow circles */
+    .glow{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;pointer-events:none}
+    .g1{width:360px;height:360px;left:-120px;top:-40px;background:radial-gradient(circle at 30% 30%,#ff9d6a,transparent 60%)}
+    .g2{width:420px;height:420px;right:-160px;top:120px;background:radial-gradient(circle at 50% 50%,#ffd166,transparent 60%)}
+
+    /* SVG idol */
+    .idol{position:relative;background:linear-gradient(180deg,#1e1512,#0e0a09);border:1px solid #ffffff12;border-radius:20px;padding:22px;box-shadow:inset 0 0 40px #0006}
+    .idol svg{width:100%;height:auto}
+    .draw path{stroke-dasharray:1000;stroke-dashoffset:1000;animation:draw 4s ease forwards}
+    @keyframes draw{to{stroke-dashoffset:0}}
+    .diyas{position:absolute;inset:auto 12px -8px auto;display:flex;gap:8px}
+    .diya{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 50% 35%, #fff, var(--accent-3) 40%, transparent 70%);filter:blur(0.5px);animation:flick 1.6s ease-in-out infinite}
+    .diya:nth-child(2){animation-delay:.4s}
+    .diya:nth-child(3){animation-delay:.8s}
+    @keyframes flick{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-1px) scale(1.08)}}
+
+    /* Sections */
+    section{padding:70px 0;border-top:1px dashed #ffffff14}
+    h2{font-family:"Playfair Display";font-size:36px;margin:0 0 10px}
+    .sub{color:var(--muted);margin:0 0 20px}
+
+    /* Aarti / mantra cards */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--card);border:1px solid #ffffff14;border-radius:18px;padding:18px}
+    .card h3{margin:0 0 8px}
+    .lyrics{max-height:0;overflow:hidden;transition:max-height .4s ease;color:#e8dbcf;line-height:1.65;white-space:pre-line}
+    .card.open .lyrics{max-height:320px}
+    .card .toggle{margin-top:10px}
+
+    /* Offerings */
+    .altar{position:relative;background:linear-gradient(180deg,#130f0e,#0c0908);border-radius:20px;border:1px solid #ffffff10;padding:18px;min-height:160px;overflow:hidden}
+    .altar .prompt{color:#d9c9bc}
+    .offer-bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .offer{padding:10px 14px;border-radius:999px;background:rgb(237, 81, 2);border:1px solid #ffffff1a;cursor:pointer}
+
+    /* Wish wall */
+    .wall{position:relative;min-height:240px;background:linear-gradient(180deg,#17110f,#0b0908);border:1px solid #ffffff12;border-radius:18px;overflow:hidden}
+    .wish-input{display:flex;gap:10px;margin-top:12px}
+    input[type="text"], input[type="date"]{background:#ffffff10;color:#fff;border:1px solid #ffffff22;border-radius:12px;padding:12px 14px;outline:none;width:100%}
+
+    /* Gallery */
+    .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .tile{aspect-ratio:1/1;border-radius:14px;overflow:hidden;position:relative;background:conic-gradient(from 210deg at 50% 60%,#402a24,#6a3b31,#8a4a38,#6a3b31,#402a24)}
+    .tile::after{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 70% 30%, #ffffff22 0 10%, transparent 40%),
+      radial-gradient(circle at 30% 70%, #ffd16622 0 12%, transparent 40%);} 
+
+    /* Timeline */
+    .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .step{background:var(--card);border:1px solid #ffffff14;border-radius:14px;padding:14px}
+    .step small{opacity:.7}
+
+    /* Footer */
+    footer{padding:60px 0;color:#cabcb0;text-align:center}
+
+    /* Floating modaks */
+    .modak{position:fixed;pointer-events:none;font-size:18px;animation:float 1.6s ease-out forwards}
+    @keyframes float{to{transform:translateY(-60px);opacity:0}}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero .wrap{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr 1fr}
+      .timeline{grid-template-columns:1fr 1fr}
+      .gallery{grid-template-columns:repeat(3,1fr)}
+    }
+    @media (max-width: 640px){
+      .links{display:none}
+      .hero h1{font-size:38px}
+      .grid{grid-template-columns:1fr}
+      .timeline{grid-template-columns:1fr}
+      .gallery{grid-template-columns:repeat(2,1fr)}
+    }
+
+    /* Theme toggle */
+    .theme-toggle{position:fixed;right:16px;bottom:16px;z-index:50}
+    .theme-toggle button{background:#ffffff10;border:1px solid #ffffff22;border-radius:999px;padding:10px 14px;color:#fff}
+    .light{--bg:#fffaf5;--bg-soft:#fff5ec;--text:#2b2320;--card:#ffffff;--muted:#6b5a50}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="32" cy="32" r="30" stroke="url(#g)" stroke-width="2"/>
+            <path d="M21 34c6 6 16-3 10-9-3-3-9-1-9 4 0 7 9 13 18 9" stroke="#ffd166" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M27 45c4 3 10 2 13-2" stroke="#ff6a3d" stroke-width="2.5" stroke-linecap="round"/>
+            <defs><linearGradient id="g" x1="0" y1="0" x2="64" y2="64"><stop stop-color="#ff6a3d"/><stop offset="1" stop-color="#ffd166"/></linearGradient></defs>
+          </svg>
+          <div>
+            <div class="t">Roopchand gupta</div>
+            <small style="opacity:.7">Morya • मंगलमूर्ति</small>
+          </div>
+        </div>
+        <div class="links">
+          <a href="#aarti">Aarti</a>
+          <a href="#offer">Offerings</a>
+          <a href="#wishes">Wish Wall</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#schedule">Schedule</a>
+        </div>
+        <button class="btn" id="chantBtn">🙏 Ganpati Bappa Morya</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="g1 glow"></div>
+      <div class="g2 glow"></div>
+      <div class="container wrap">
+        <div>
+          <div class="chip">✨ शुभारंभ • Start with a blessing</div>
+          <h1>सुखकर्ता<strong> दु:खहर्ता</strong><br/>विघ्नहर्ता श्री गणेश</h1>
+          <p>Celebrate devotion with a modern, interactive single‑page website. Read aarti lyrics, make offerings, leave wishes, and enjoy subtle, tasteful animations—crafted with pure HTML, CSS, and JavaScript.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn" href="#aarti">Read Aarti</a>
+            <a class="btn" style="background:linear-gradient(135deg,var(--success),#77e0d6);box-shadow:0 10px 24px #2ec4b633" href="#offer">Offer a Flower</a>
+          </div>
+        </div>
+        <div class="idol">
+          <!-- Stylized line-art of Ganesha with draw animation -->
+          <svg class="draw" viewBox="0 0 600 520" fill="none" stroke="#ffd166" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-label="Lord Ganesha line art">
+            <path d="M300 80c-48 6-92 46-108 92-14 40 0 84 36 101 30 14 70 7 90-18 21-26 10-67-22-76-21-6-45 8-49 29-6 33 27 68 70 83 54 19 116 6 156-28 42-36 56-95 24-138-30-40-98-56-156-45"/>
+            <path d="M344 330c-20 20-44 32-69 38-18 4-38 5-56 14-19 9-34 25-40 44-4 11-5 24 2 34 9 12 27 15 41 11 21-6 34-23 42-42 5-12 9-25 13-38 2-7 6-23 6-23"/>
+            <path d="M373 343c9 13 25 24 43 25 15 1 30-6 39-18 8-11 10-27 4-39-9-18-34-25-52-17-18 9-27 30-25 49 2 20 14 36 30 47 18 12 39 19 60 22 28 4 58 2 84-8"/>
+            <path d="M260 210c-14-16-41-22-62-18-26 5-48 22-60 46-12 24-12 53 3 75 17 25 50 35 80 30 20-4 39-14 55-27"/>
+            <path d="M306 122c10-14 28-24 46-28 24-6 50-2 72 9 21 10 38 28 48 49"/>
+            <path d="M201 116c-25-15-58-14-83 2-28 18-43 52-37 84 5 28 23 52 48 66"/>
+          </svg>
+          <div class="diyas"><div class="diya"></div><div class="diya"></div><div class="diya"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="aarti">
+      <div class="container">
+        <h2>आरती • Aarti & Mantras</h2>
+        <p class="sub">Tap a card to view lyrics. Sing along and spread the shubh vibes ✨</p>
+        <div class="grid" id="aartiGrid">
+          <div class="card">
+            <h3>सुखकर्ता दुःखहर्ता</h3>
+            <div class="lyrics">सुखकर्ता दुखहर्ता वार्ता विघ्नाची।\nनूरवी पूर्वी प्रेम कृपा जयाची।\nसरळ सोंड वक्रतुंड त्रिनयना।\nदासरामाचा राखोनी असा॥</div>
+            <button class="toggle btn">Show Lyrics</button>
+          </div>
+          <div class="card">
+            <h3>वक्रतुंड महाकाय</h3>
+            <div class="lyrics">वक्रतुंड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥</div>
+            <button class="toggle btn">Show Lyrics</button>
+          </div>
+          <div class="card">
+            <h3>Ganesh Gayatri</h3>
+            <div class="lyrics">ॐ एकदन्ताय विद्महे।\nवक्रतुण्डाय धीमहि।\nतन्नो दन्तिः प्रचोदयात्॥</div>
+            <button class="toggle btn">Show Lyrics</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="offer">
+      <div class="container">
+        <h2>पूजा अर्पण • Offerings</h2>
+        <p class="sub">Offer virtual pushpa, modak, and deepa to Bappa. Click to place on the altar.</p>
+        <div class="altar" id="altar">
+          <div class="prompt">Altar ready. Place your offerings…</div>
+        </div>
+        <div class="offer-bar">
+          <button class="offer" data-emoji="🌸">Flower</button>
+          <button class="offer" data-emoji="🥮">Modak</button>
+          <button class="offer" data-emoji="🪔">Diya</button>
+          <button class="offer" data-emoji="🍃">Tulsi</button>
+          <button class="offer" data-emoji="🎉">Confetti</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="wishes">
+      <div class="container">
+        <h2>मनोकामना दीवार • Wish Wall</h2>
+        <p class="sub">Type your wish and send it to the mandap. It will float gently like a शुभ पर्ण (sacred leaf).</p>
+        <div class="wall" id="wall"></div>
+        <div class="wish-input">
+          <input id="wish" type="text" placeholder="Write your wish… (e.g., Bless my family with health)" />
+          <button class="btn" id="addWish">Send Wish</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="container">
+        <h2>क्षणचित्र • Gallery</h2>
+        <p class="sub">A minimal, ornamental grid. Replace with your own images later—drop them into the tiles!</p>
+        <div class="gallery" id="galleryGrid">
+          <div class="tile" title="Decoration"></div>
+          <div class="tile" title="Mandap"></div>
+          <div class="tile" title="Aarti"></div>
+          <div class="tile" title="Visarjan"></div>
+          <div class="tile"></div>
+          <div class="tile"></div>
+          <div class="tile"></div>
+          <div class="tile"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="schedule">
+      <div class="container">
+        <h2>उत्सव क्रम • Festival Schedule</h2>
+        <p class="sub">Set your Ganesh Chaturthi date below to generate a 10‑day schedule. (Default is today.)</p>
+        <div class="wish-input">
+          <input type="date" id="festDate">
+          <button class="btn" id="makeSchedule">Generate Schedule</button>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Made with devotion • जय देव जय देव जय मंगलमूर्ति • <span style="opacity:.7">Built in pure HTML, CSS & JS</span></p>
+    </div>
+  </footer>
+
+  <div class="theme-toggle"><button id="themeBtn">🌙 Theme</button></div>
+
+  <script>
+    // Theme toggle
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', ()=>{
+      document.body.classList.toggle('light');
+      themeBtn.textContent = document.body.classList.contains('light') ? '🌞 Theme' : '🌙 Theme';
+    });
+
+    // Aarti toggle
+    document.querySelectorAll('.card .toggle').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const card = btn.closest('.card');
+        card.classList.toggle('open');
+        btn.textContent = card.classList.contains('open') ? 'Hide Lyrics' : 'Show Lyrics';
+      });
+    });
+
+    // Chant button: confetti + floating modaks
+    const chantBtn = document.getElementById('chantBtn');
+    chantBtn.addEventListener('click',()=>{
+      chantBtn.disabled = true; setTimeout(()=>chantBtn.disabled=false, 600);
+      spawnConfetti(32);
+      chant('Ganpati Bappa Morya!');
+      for(let i=0;i<12;i++) dropModak();
+    });
+
+    function dropModak(){
+      const e=document.createElement('div');
+      e.className='modak';
+      e.textContent='🥮';
+      e.style.left=Math.random()*100+'vw';
+      e.style.top=(window.innerHeight-20)+'px';
+      document.body.appendChild(e);
+      setTimeout(()=>e.remove(),1600);
+    }
+
+    function spawnConfetti(n=24){
+      for(let i=0;i<n;i++){
+        const s=document.createElement('span');
+        s.textContent='🎊';
+        s.style.position='fixed';
+        s.style.left=Math.random()*100+'vw';
+        s.style.top='-20px';
+        s.style.fontSize=(12+Math.random()*16)+'px';
+        s.style.transition='transform 1.4s cubic-bezier(.2,.7,.2,1), opacity 1.4s';
+        s.style.zIndex=60;
+        document.body.appendChild(s);
+        requestAnimationFrame(()=>{
+          s.style.transform=`translateY(${window.innerHeight+40}px) rotate(${Math.random()*180-90}deg)`;
+          s.style.opacity='0.9';
+        });
+        setTimeout(()=>s.remove(),1600);
+      }
+    }
+
+    function chant(text){
+      const b=document.createElement('div');
+      b.textContent=text;
+      b.style.position='fixed';
+      b.style.left='50%';
+      b.style.top='20%';
+      b.style.transform='translate(-50%, -50%) scale(.9)';
+      b.style.padding='12px 18px';
+      b.style.borderRadius='999px';
+      b.style.background='linear-gradient(135deg, #ff6a3d, #ffd166)';
+      b.style.color='#000';
+      b.style.fontWeight='900';
+      b.style.zIndex='80';
+      b.style.boxShadow='0 10px 24px rgba(255,106,61,.33)';
+      b.style.transition='transform .25s, opacity .25s';
+      document.body.appendChild(b);
+      setTimeout(()=>{b.style.transform='translate(-50%, -50%) scale(1)';},10);
+      setTimeout(()=>{b.style.opacity='0';},1200);
+      setTimeout(()=>b.remove(),1600);
+    }
+
+    // Offerings to altar
+    const altar = document.getElementById('altar');
+    document.querySelectorAll('.offer').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        placeOffering(btn.dataset.emoji);
+        if(btn.dataset.emoji==='🎉') spawnConfetti(42);
+      })
+    })
+
+    function placeOffering(emoji){
+      const n=document.createElement('div');
+      n.textContent=emoji;
+      n.style.position='absolute';
+      const x=12+Math.random()*(altar.clientWidth-50);
+      const y=40+Math.random()*(altar.clientHeight-70);
+      n.style.left=x+'px';
+      n.style.top=y+'px';
+      n.style.filter='drop-shadow(0 6px 10px rgba(0,0,0,.5))';
+      n.style.fontSize=(20+Math.random()*14)+'px';
+      n.style.transform='translateY(10px)';
+      n.style.opacity='0';
+      n.style.transition='transform .25s ease, opacity .25s ease';
+      altar.appendChild(n);
+      requestAnimationFrame(()=>{n.style.transform='translateY(0)';n.style.opacity='1'});
+    }
+
+    // Wish wall
+    const wall=document.getElementById('wall');
+    const wishInput=document.getElementById('wish');
+    document.getElementById('addWish').addEventListener('click',()=>{
+      const t=wishInput.value.trim();
+      if(!t) return;
+      pushWish(t);
+      wishInput.value='';
+    });
+
+    function pushWish(text){
+      const leaf=document.createElement('div');
+      leaf.textContent='🍃 '+text;
+      leaf.style.position='absolute';
+      leaf.style.left=Math.random()*80+10+'%';
+      leaf.style.top='100%';
+      leaf.style.whiteSpace='pre-wrap';
+      leaf.style.padding='8px 12px';
+      leaf.style.background='rgba(255,255,255,.06)';
+      leaf.style.border='1px solid rgba(255,255,255,.16)';
+      leaf.style.borderRadius='12px';
+      leaf.style.backdropFilter='blur(2px)';
+      leaf.style.transition='transform 12s linear, opacity 12s ease';
+      wall.appendChild(leaf);
+      const dx=(Math.random()*2-1)*60; // side drift
+      const dy=- (120 + Math.random()*120);
+      requestAnimationFrame(()=>{
+        leaf.style.transform=`translate(${dx}px, ${dy}%)`;
+        leaf.style.opacity='0.1';
+      });
+      setTimeout(()=>leaf.remove(),12500);
+    }
+
+    // Festival schedule generator (10 days from selected start)
+    const tl = document.getElementById('timeline');
+    const festDate = document.getElementById('festDate');
+    document.getElementById('makeSchedule').addEventListener('click',buildSchedule);
+
+    function buildSchedule(){
+      const base = festDate.value ? new Date(festDate.value) : new Date();
+      const names = ['Pratipada (Day 1)','Dwitiya','Tritiya','Chaturthi – Sthapana','Panchami','Shashthi','Saptami','Ashtami','Navami','Dashami – Visarjan'];
+      tl.innerHTML='';
+      for(let i=0;i<10;i++){
+        const d=new Date(base); d.setDate(base.getDate()+i);
+        const box=document.createElement('div');
+        box.className='step';
+        const dateStr=d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+        box.innerHTML=`<small>${dateStr}</small><h3>${names[i]||('Day '+(i+1))}</h3><p style="margin:6px 0 0;opacity:.85">Suggested: Morning aarti, prasad (modak), and evening cultural program.</p>`;
+        tl.appendChild(box);
+      }
+    }
+
+    // Init schedule with today
+    buildSchedule();
+
+    // Make gallery tiles accept dropped images
+    document.querySelectorAll('.tile').forEach(tile=>{
+      tile.addEventListener('dragover',e=>{e.preventDefault(); tile.style.outline='2px dashed #ffd166'});
+      tile.addEventListener('dragleave',()=>tile.style.outline='none');
+      tile.addEventListener('drop',e=>{
+        e.preventDefault(); tile.style.outline='none';
+        const file=e.dataTransfer.files && e.dataTransfer.files[0];
+        if(!file) return;
+        const reader=new FileReader();
+        reader.onload=()=>{tile.style.background=`center/cover no-repeat url(${reader.result})`};
+        reader.readAsDataURL(file);
+      });
+      tile.title='Drag & drop an image here';
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ganpati Bappa • शुभमंगल</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* (All previous CSS unchanged) */
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+     
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <!-- (Hero content unchanged) -->
+    </section>
+
+    <section id="aarti">
+      <div class="container">
+        <h2>आरती • Aarti & Mantras</h2>
+        <p class="sub">Tap a card to view lyrics or click the link to listen online 🎶</p>
+        <div class="grid" id="aartiGrid">
+          <div class="card">
+            <h3>सुखकर्ता दुःखहर्ता</h3>
+            <div class="lyrics">सुखकर्ता दुखहर्ता वार्ता विघ्नाची।\nनूरवी पूर्वी प्रेम कृपा जयाची।\nसरळ सोंड वक्रतुंड त्रिनयना।\nदासरामाचा राखोनी असा॥</div>
+            <a href="https://youtu.be/jhlyqXQzb1I?si=MD-BZwehY0RB6ZKF" target="_blank" class="btn">▶ Listen on YouTube</a>
+            <button class="toggle btn">Show Lyrics</button>
+          </div>
+          <div class="card">
+            <h3>वक्रतुंड महाकाय</h3>
+            <div class="lyrics">वक्रतुंड महाकाय सूर्यकोटि समप्रभ।\nनिर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥</div>
+            <a href="https://youtu.be/9MAshN0I9Kk?si=foTVuaPbk7VLPpOZ" target="_blank" class="btn">▶ Listen on YouTube</a>
+            <button class="toggle btn">Show Lyrics</button>
+          </div>
+          <div class="card">
+            <h3>Ganesh Gayatri</h3>
+            <div class="lyrics">ॐ एकदन्ताय विद्महे।\nवक्रतुण्डाय धीमहि।\nतन्नो दन्तिः प्रचोदयात्॥</div>
+            <a href="https://youtu.be/ym4o5F8ncY0?si=XXoQ8krEVfZRSGqb" target="_blank" class="btn">▶ Listen on YouTube</a>
+            <button class="toggle btn">Show Lyrics</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- (Other sections unchanged) -->
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Made with devotion • जय देव जय देव जय मंगलमूर्ति • <span style="opacity:.7">Built in pure HTML, CSS & JS</span></p>
+    </div>
+  </footer>
+
+  <div class="theme-toggle"><button id="themeBtn">🌙 Theme</button></div>
+
+  <script>
+    // (Previous JS unchanged)
+  </script>
+  <div class="brand">
+  <div id="logoWrap" style="width:48px; height:48px; display:flex; align-items:center; justify-content:center;">
+    <!-- Fallback SVG until user uploads -->
+    <svg id="logoSVG" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="32" cy="32" r="30" stroke="url(#g)" stroke-width="2"/>
+      <path d="M21 34c6 6 16-3 10-9-3-3-9-1-9 4 0 7 9 13 18 9" stroke="#ffd166" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M27 45c4 3 10 2 13-2" stroke="#ff6a3d" stroke-width="2.5" stroke-linecap="round"/>
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="64" y2="64">
+          <stop stop-color="#ff6a3d"/>
+          <stop offset="1" stop-color="#ffd166"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <!-- hidden input -->
+  <input id="logoFile" type="file" accept="image/*" capture="environment" style="display:none">
+
+  <!-- upload button -->
+  <button id="uploadLogoBtn" style="padding:8px 10px; font-size:13px; margin-left:10px;">Upload Logo</button>
+
+  <div style="margin-left:12px;">
+    <div style="font-size:18px; font-weight:600;">Ganpati Bappa</div>
+    <small style="opacity:.7">Morya • मंगलमूर्ति</small>
+  </div>
+</div>
+
+<style>
+  .logoImg {
+    width:48px;
+    height:48px;
+    object-fit:cover;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+    display:block;
+  }
+  @media (max-width:640px){
+    .logoImg{ width:42px; height:42px }
+  }
+</style>
+
+<script>
+  (function(){
+    const uploadBtn = document.getElementById('uploadLogoBtn');
+    const fileInput = document.getElementById('logoFile');
+    const logoWrap = document.getElementById('logoWrap');
+
+    uploadBtn.addEventListener('click', ()=> fileInput.click());
+    logoWrap.addEventListener('click', ()=> fileInput.click());
+
+    fileInput.addEventListener('change', (e)=>{
+      const f = e.target.files && e.target.files[0];
+      if(!f) return;
+      if(f.size > 2.5 * 1024 * 1024){
+        alert('Image too large — use under 2.5 MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(ev){
+        const img = document.createElement('img');
+        img.src = ev.target.result;
+        img.className = 'logoImg';
+        img.alt = 'Uploaded logo';
+        img.loading = 'lazy';
+        logoWrap.innerHTML = '';
+        logoWrap.appendChild(img);
+      };
+      reader.readAsDataURL(f);
+    });
+  })();
+</script>
+<section class="gallery" style="padding:40px 20px; text-align:center;">
+  <h2 style="font-size:24px; margin-bottom:20px;">🪔 Ganesh Avatar Gallery 🪔</h2>
+  <div class="gallery-grid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px;">
+
+    <!-- Ganesh Avatar 1 -->
+    <div class="gallery-item">
+      <img src="https://img.freepik.com/premium-photo/statue-ganesha-ganpati-with-blur-bokeh-diwali-puja-new-year-generative-ai_982051-149.jpg?w=2000" alt="Ganesh Avatar 1">
+    </div>
+
+    <!-- Ganesh Avatar 2 -->
+    <div class="gallery-item">
+      <img src="https://th.bing.com/th/id/R.4243a4651b28cc6845bd319b2f0fa563?rik=fEnP1%2bnoyfhSBw&riu=http%3a%2f%2fmyindianthings.com%2fcdn%2fshop%2ffiles%2fGanesh_Chaturthi_Vibes_Ganesh_Ji_Wallpaper_7a87397d-18d7-4ead-a21c-844ac53b3e38_1024x.jpg%3fv%3d1711531075&ehk=95PfUOHdTewZBrzoIUu163HxKHvjaWLrepgQTuVt6X0%3d&risl=&pid=ImgRaw&r=0" alt="Ganesh Avatar 2">
+    </div>
+
+    <!-- Ganesh Avatar 3 -->
+    <div class="gallery-item">
+      <img src="https://img.freepik.com/premium-photo/lord-ganpati-background-ganesh-chaturthi-india-festival_1302319-10664.jpg" alt="Ganesh Avatar 3">
+    </div>
+
+    <!-- Ganesh Avatar 4 -->
+    <div class="gallery-item">
+      <img src="https://static.toiimg.com/thumb/103689071.cms?width=680&height=512&imgsize=289518" alt="Ganesh Avatar 4">
+    </div>
+
+    <div class="gallery-item">
+      <img src="https://lalbaugcharaja.com/wp-content/uploads/2024/09/lalbugcharaja-homepage2024.jpeg" alt="Ganesh Avatar 4">
+    </div>
+
+     <div class="gallery-item">
+      <img src="https://images.pexels.com/photos/28288477/pexels-photo-28288477/free-photo-of-hindu-lord-ganesha-on-ganesh-chaturthi.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Ganesh Avatar 4">
+    </div>
+
+     <div class="gallery-item">
+      <img src="https://tse1.mm.bing.net/th/id/OIP.8EKrCUHn7QiAZw5HsCU00gHaLC?r=0&pid=ImgDet&w=474&h=706&rs=1&o=7&rm=3" alt="Ganesh Avatar 4">
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .gallery-item img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    transition: transform 0.3s ease;
+  }
+  .gallery-item img:hover {
+    transform: scale(1.05);
+  }
+</style>
+
+</body>
+</html>
